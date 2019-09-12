@@ -115,8 +115,8 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       var count = 0;
-      for (var i = 0; i < this.rows().length; i++) {
-        if (this.rows()[i][colIndex]) {
+      for (var i = 0; i < this.get(colIndex).length; i++) {
+        if (this.get(colIndex)[i]) {      // we're given the column index, so we use that to find conflicts in that given column
           count++;
         }
         if (count > 1) {
@@ -131,6 +131,7 @@
       for (var i = 0; i < this.rows().length; i++) {
         var count = 0;
         for (var j = 0; j < this.rows()[i].length; j++) {
+          // just switches j and i indexes (j refers to the column index, i refers to row index)
           if (this.rows()[j][i]) {
             count++;
           }
@@ -149,8 +150,20 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-
-      return false; // fixme
+      var count = 0;
+      if (majorDiagonalColumnIndexAtFirstRow === this.rows().length - 1) {                                // if the column index is equal to the end of the array (column 3, row 0)
+        return false;                                                                                     // it will never have a conflict because it's the corner one
+      }
+      for (var i = 0; i < this.rows().length; i++) {                                                      // iterate through the board array
+        if (this.rows()[i][majorDiagonalColumnIndexAtFirstRow]) {                                         // if there is a rook at the row's 0 index at column's 0 index
+          count++;                                                                                        // add a rook to the count
+        }
+        if (count > 1) {                                                                                  // if there is more than 1 rook at the row or column
+          return true;                                                                                    // return true for conflict
+        }
+        majorDiagonalColumnIndexAtFirstRow++;                                                             // move to the next column index
+      }
+      return false; // fixme                                                                              // return false as default if there are no conflicts
     },
 
     // test if any major diagonals on this board contain conflicts
