@@ -115,8 +115,8 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       var count = 0;
-      for (var i = 0; i < this.get(colIndex).length; i++) {
-        if (this.get(colIndex)[i]) {      // we're given the column index, so we use that to find conflicts in that given column
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.rows()[i][colIndex]) {      // we're given the column index, so we use that to find conflicts in that given column
           count++;
         }
         if (count > 1) {
@@ -151,9 +151,9 @@
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       var count = 0;
-      if (majorDiagonalColumnIndexAtFirstRow === this.rows().length - 1) {                                // if the column index is equal to the end of the array (column 3, row 0)
-        return false;                                                                                     // it will never have a conflict because it's the corner one
-      }
+      // if (majorDiagonalColumnIndexAtFirstRow === this.rows().length - 1) {                              // if the column index is equal to the end of the array (column 3, row 0)
+      //   return false;                                                                                   // it will never have a conflict because it's the corner one
+      // }
       for (var i = 0; i < this.rows().length; i++) {                                                      // iterate through the board array
         if (this.rows()[i][majorDiagonalColumnIndexAtFirstRow]) {                                         // if there is a rook at the row's 0 index at column's 0 index
           count++;                                                                                        // add a rook to the count
@@ -164,10 +164,16 @@
         majorDiagonalColumnIndexAtFirstRow++;                                                             // move to the next column index
       }
       return false; // fixme                                                                              // return false as default if there are no conflicts
+                                                                                                          // if this._isinnBoundss(this.rows()[i],this.rows()[majordiag])
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      for (var i = -this.rows().length; i < this.rows().length; i++) {                                    // loop through the negative indexes. since there's no -0, we just use the length of the negative array ie -4 -3 -2 -1 0 1 2 3 (all of these are indexes)
+        if (this.hasMajorDiagonalConflictAt(i)) {                                                         // if there is a rook/queen at the index from the -matrix length
+          return true;                                                                                    // then there's a conflict
+        }
+      }
       return false; // fixme
     },
 
