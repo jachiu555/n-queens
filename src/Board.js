@@ -184,11 +184,26 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      var count = 0;
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.rows()[i][minorDiagonalColumnIndexAtFirstRow]) {
+          count++;
+        }
+        if (count > 1) {
+          return true;
+        }
+        minorDiagonalColumnIndexAtFirstRow--;                                                             // just work backwards and decrement ie. start row0,col0 and move to next row, but then shift column index backwards aka to the left example [  0,0 => \ => \ => \ => \  ]
+      }
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      for (var i = 0; i < this.rows().length * 2; i++) {                                                  // starting point is usual 0,0, but in this condition, we need to account for the starting point to be at the end of this.rows().length). then shift row by 1 after each iteration. example [ 0,0 => / => / => / => /  ]
+        if (this.hasMinorDiagonalConflictAt(i)) {                                                         // if there is another rook/queen at that index
+          return true;                                                                                    // then there is a conflict
+        }
+      }
       return false; // fixme
     }
 
@@ -206,3 +221,5 @@
   };
 
 }());
+
+
